@@ -1,16 +1,12 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import za.co.mikhails.nanodegree.jokeslib.JokeSource;
-import za.co.mikhails.nanodegree.showjokesandroidlib.ShowJokeActivity;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -46,16 +42,16 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void tellJoke(View view) {
+        // *** Get joke from Java Library ***
 //        final String newJoke = jokeSource.getJoke();
-
 //        Toast.makeText(this, newJoke, Toast.LENGTH_SHORT).show();
 
+        // *** Launch Activity from Android Library ***
 //        Intent intent = new Intent(this, ShowJokeActivity.class);
 //        intent.putExtra(ShowJokeActivity.JOKE_TEXT, newJoke);
 //        startActivity(intent);
 
-        new GetJokeAsyncTask().execute(new Pair<Context, String>(this, "Manfred"));
+        // *** Run async task to fetch joke from GCE ***
+        new GetJokeAsyncTask(this).execute(getResources().getString(R.string.backend_base_url));
     }
-
-
 }
