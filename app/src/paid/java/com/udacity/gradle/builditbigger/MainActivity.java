@@ -1,5 +1,6 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -7,10 +8,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import za.co.mikhails.nanodegree.jokeslib.JokeSource;
+import za.co.mikhails.nanodegree.showjokesandroidlib.ShowJokeActivity;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements AsyncTaskResultListener {
 
     private final JokeSource jokeSource = new JokeSource();
+    private MainActivityFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +21,11 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
     }
 
+    @Override
+    public void onAttachFragment(android.support.v4.app.Fragment fragment) {
+        super.onAttachFragment(fragment);
+        this.fragment = (MainActivityFragment) fragment;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -42,6 +50,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void tellJoke(View view) {
+        fragment.showLoadingIndicator(true);
+
         // *** Get joke from Java Library ***
 //        final String newJoke = jokeSource.getJoke();
 //        Toast.makeText(this, newJoke, Toast.LENGTH_SHORT).show();
@@ -53,5 +63,14 @@ public class MainActivity extends ActionBarActivity {
 
         // *** Run async task to fetch joke from GCE ***
         new GetJokeAsyncTask(this).execute(getResources().getString(R.string.backend_base_url));
+    }
+
+    @Override
+    public void setResult(String result) {
+        fragment.showLoadingIndicator(false);
+
+        Intent intent = new Intent(this, ShowJokeActivity.class);
+        intent.putExtra(ShowJokeActivity.JOKE_TEXT, result);
+        this.startActivity(intent);
     }
 }

@@ -17,3 +17,17 @@ allprojects {
         jcenter()
     }
 }
+
+task serverStart(dependsOn: ':jokesbackend:appengineRun') {
+    project(':jokesbackend').afterEvaluate { jokesbackend ->
+        jokesbackend.extensions.appengine.daemon = true
+    }
+}
+task androidTest(dependsOn: ':app:connectedAndroidTest')
+task serverStop(dependsOn: ':jokesbackend:appengineRun')
+
+androidTest.mustRunAfter serverStart
+serverStop.mustRunAfter androidTest
+
+task alltogether(dependsOn: [serverStart, androidTest, serverStop])
+

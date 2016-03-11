@@ -17,7 +17,7 @@ public class GetJokeAsyncTaskTest extends InstrumentationTestCase {
     @Before
     public void setUp() {
         Context context = getInstrumentation().getTargetContext();
-        asyncTask = new GetJokeAsyncTask(context);
+        asyncTask = new GetJokeAsyncTask(null);
         baseUrl = context.getResources().getString(R.string.backend_base_url);
     }
 

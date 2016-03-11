@@ -9,11 +9,12 @@ import android.view.ViewGroup;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
-
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
+
+    private View loadingIndicator;
 
     public MainActivityFragment() {
     }
@@ -22,6 +23,7 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
+        loadingIndicator = root.findViewById(R.id.loadingIndicator);
 
         AdView mAdView = (AdView) root.findViewById(R.id.adView);
         // Create an ad request. Check logcat output for the hashed device ID to
@@ -32,5 +34,9 @@ public class MainActivityFragment extends Fragment {
                 .build();
         mAdView.loadAd(adRequest);
         return root;
+    }
+
+    public void showLoadingIndicator(boolean show) {
+        loadingIndicator.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 }

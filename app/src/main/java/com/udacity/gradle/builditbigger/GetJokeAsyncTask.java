@@ -1,7 +1,5 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -12,14 +10,13 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import java.io.IOException;
 
 import za.co.mikhails.nanodegree.jokes.backend.myApi.MyApi;
-import za.co.mikhails.nanodegree.showjokesandroidlib.ShowJokeActivity;
 
 public class GetJokeAsyncTask extends AsyncTask<String, Void, String> {
     private static MyApi myApiService = null;
-    private Context context;
+    private AsyncTaskResultListener listener;
 
-    public GetJokeAsyncTask(Context context) {
-        this.context = context;
+    public GetJokeAsyncTask(AsyncTaskResultListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -50,8 +47,8 @@ public class GetJokeAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        Intent intent = new Intent(context, ShowJokeActivity.class);
-        intent.putExtra(ShowJokeActivity.JOKE_TEXT, result);
-        context.startActivity(intent);
+        if (listener != null) {
+            listener.setResult(result);
+        }
     }
 }
